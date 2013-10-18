@@ -1,5 +1,5 @@
 {
-  "name": "geomac",
+  "name": "update-fire-perimeters",
   "description": "Polls GeoMAC for new data. When data are detected, it splits the dataset up into indiviudal files, creates GeoJSON from each file, and pushes changes to GitHub.",
   "version": "0.1.0",
   "dependencies": {
@@ -9,7 +9,7 @@
     "togeojson": "0.2.1"
   },
   "engines": {
-    "node": "*"
+    "node": "0.10.20"
   },
   "private": true
 }
