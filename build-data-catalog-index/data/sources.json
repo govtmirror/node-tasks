@@ -1,0 +1,5 @@
+{
+  "ArcGisServer": ["http://mapservices.nps.gov/arcgis/rest"],
+  "CartoDb": ["nps"],
+  "TileStream": ["nps"]
+}
