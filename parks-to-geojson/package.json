@@ -1,0 +1,17 @@
+{
+  "name": "parks-to-geojson",
+  "version": "0.0.0",
+  "description": "Converts National Park boundaries from Shapefile to GeoJSON.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nate Irwin",
+  "license": "Public Domain",
+  "dependencies": {
+    "shp": "0.0.1",
+    "topojson": "~1.4.5",
+    "geojson-utils": "~1.0.2",
+    "terraformer": "~1.0.1"
+  }
+}
