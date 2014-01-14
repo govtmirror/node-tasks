@@ -1,0 +1,16 @@
+{
+  "name": "bear-parks-to-centroids",
+  "version": "0.0.0",
+  "description": "Creates a minified dataset of National Park units where bears live.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nate Irwin",
+  "license": "Public Domain",
+  "dependencies": {
+    "request": "~2.31.0",
+    "fast-csv": "0.0.3",
+    "underscore": "~1.5.2"
+  }
+}
