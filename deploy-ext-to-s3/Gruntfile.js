@@ -136,7 +136,7 @@ module.exports = function(grunt) {
       production: {
         files: [{
           cwd: './dist/',
-          dest: 'libs/' + version + '/',
+          dest: 'libs/ext/' + version + '/',
           expand: true,
           filter: 'isFile',
           src: [
