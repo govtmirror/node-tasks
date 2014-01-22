@@ -1,0 +1,21 @@
+{
+  "author": "Nate Irwin",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-aws-s3": "0.7.2",
+    "grunt-contrib-clean": "0.5.0",
+    "grunt-contrib-compress": "0.5.3",
+    "grunt-invalidate-cloudfront": "0.1.2"
+  },
+  "description": "Deploys the National Park Service copy of ExtJS.",
+  "license": "Public Domain",
+  "main": "app.js",
+  "name": "deploy-ext",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.0",
+  "dependencies": {
+    "grunt-contrib-copy": "~0.5.0"
+  }
+}
