@@ -1,0 +1,23 @@
+{
+  "author": "",
+  "dependencies": {
+    "connect": "~2.12.0",
+    "connect-gzip": "~0.1.5",
+    "underscore": "~1.5.2",
+    "json3": "~3.2.6",
+    "request": "~2.30.0",
+    "memory-cache": "0.0.5",
+    "node-xml-lite": "0.0.3",
+    "jsdom": "~0.8.10",
+    "libxmljs": "~0.8.1",
+    "pretty-data": "~0.40.0"
+  },
+  "description": "A simple proxy.",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "npmap-proxy",
+  "version": "0.0.0"
+}
