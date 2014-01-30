@@ -70,9 +70,9 @@ connect.createServer(gzip.gzip(), function(req, res) {
             break;
           }
 
-          cache.put(apiUrl, text, 120000);
+          //cache.put(apiUrl, text, 120000);
           //res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + text + (apiType === 'json' ? '' : '"') + ');');
-          res.end('new');
+          //res.end('new');
         }
       });
     }
