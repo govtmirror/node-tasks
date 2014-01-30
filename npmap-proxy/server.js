@@ -20,8 +20,6 @@ connect.createServer(gzip.gzip(), function(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET');
   res.setHeader('Content-Type', 'text/javascript');
 
-  res.end('Stop!');
-
   if (!apiCallback) {
     res.end('{"error": "The \'callback\' parameter is required."}');
   } else if (!apiType) {
@@ -31,11 +29,11 @@ connect.createServer(gzip.gzip(), function(req, res) {
   } else {
     var cached = cache.get(apiUrl);
 
-    if (cached && typeof cached === 'string' && cached.length > 0) {
+    //if (cached && typeof cached === 'string' && cached.length > 0) {
       //cache.put(apiUrl, cached, 120000);
       //res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + cached + (apiType === 'json' ? '' : '"') + ');');
-      res.end('cached');
-    } else {
+      //res.end('cached');
+    //} else {
       var externalReqHeaders = _.omit(req.headers, 'accept-encoding', 'connection', 'cookie', 'host', 'user-agent');
 
       request({
@@ -77,6 +75,6 @@ connect.createServer(gzip.gzip(), function(req, res) {
           */
         }
       });
-    }
+    //}
   }
 }).listen(process.env.PORT || 8000);
