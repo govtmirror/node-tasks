@@ -44,8 +44,10 @@ connect.createServer(gzip.gzip(), function(req, res) {
       }, function(error, response, body) {
         if (error) {
           //res.end(apiCallback + '({"error":"Error!!!!!","success":false});');
-          res.end('no good');
+          res.end('error');
         } else {
+          res.end('new');
+
           var text;
 
           switch (apiType) {
