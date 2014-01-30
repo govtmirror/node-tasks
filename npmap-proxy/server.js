@@ -30,7 +30,7 @@ connect.createServer(gzip.gzip(), function(req, res) {
     var cached = cache.get(apiUrl);
 
     if (cached && typeof cached === 'string' && cached.length > 0) {
-      cache.put(apiUrl, cached, 120000);
+      //cache.put(apiUrl, cached, 120000);
       //res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + cached + (apiType === 'json' ? '' : '"') + ');');
       res.end('cached');
     } else {
@@ -48,19 +48,18 @@ connect.createServer(gzip.gzip(), function(req, res) {
         } else {
           res.end('new');
 
+          /*
           var text;
 
           switch (apiType) {
           case 'json':
-            /*
             try {
               body = json3.stringify(json3.parse(body));
               text = body;
             } catch (e) {
               text = body;
             }
-            */
-            text = body;
+
             break;
           case 'text':
             text = cleanString(body);
@@ -73,6 +72,7 @@ connect.createServer(gzip.gzip(), function(req, res) {
           //cache.put(apiUrl, text, 120000);
           //res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + text + (apiType === 'json' ? '' : '"') + ');');
           //res.end('new');
+          */
         }
       });
     }
