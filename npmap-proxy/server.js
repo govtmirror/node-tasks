@@ -45,10 +45,15 @@ connect.createServer(gzip.gzip(), function(req, res) {
 
         switch (apiType) {
         case 'json':
+          /*
           try {
             body = json3.stringify(json3.parse(body));
             text = body;
-          } catch (e) {}
+          } catch (e) {
+            text = body;
+          }
+          */
+          text = body;
           break;
         case 'text':
           text = cleanString(body);
