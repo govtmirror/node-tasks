@@ -41,30 +41,34 @@ connect.createServer(gzip.gzip(), function(req, res) {
         strictSSL: false,
         uri: apiUrl
       }, function(error, response, body) {
-        var text;
+        if (error) {
+          res.end(apiCallback + '({"error":"Error!!!!!","success":false});');
+        } else {
+          var text;
 
-        switch (apiType) {
-        case 'json':
-          /*
-          try {
-            body = json3.stringify(json3.parse(body));
+          switch (apiType) {
+          case 'json':
+            /*
+            try {
+              body = json3.stringify(json3.parse(body));
+              text = body;
+            } catch (e) {
+              text = body;
+            }
+            */
             text = body;
-          } catch (e) {
-            text = body;
+            break;
+          case 'text':
+            text = cleanString(body);
+            break;
+          case 'xml':
+            text = cleanString(pd.xmlmin(body));
+            break;
           }
-          */
-          text = body;
-          break;
-        case 'text':
-          text = cleanString(body);
-          break;
-        case 'xml':
-          text = cleanString(pd.xmlmin(body));
-          break;
-        }
 
-        cache.put(apiUrl, text, 120000);
-        res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + text + (apiType === 'json' ? '' : '"') + ');');
+          cache.put(apiUrl, text, 120000);
+          res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + text + (apiType === 'json' ? '' : '"') + ');');
+        }
       });
     }
   }
