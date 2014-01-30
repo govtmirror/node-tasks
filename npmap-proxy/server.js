@@ -18,7 +18,7 @@ connect.createServer(gzip.gzip(), function(req, res) {
     apiUrl = params.url;
 
   //res.setHeader('Access-Control-Allow-Methods', 'GET');
-  //res.setHeader('Content-Type', 'text/javascript');
+  res.setHeader('Content-Type', 'text/javascript');
 
   if (!apiCallback) {
     res.end('{"error": "The \'callback\' parameter is required."}');
