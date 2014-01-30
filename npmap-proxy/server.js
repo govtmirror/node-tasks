@@ -29,11 +29,10 @@ connect.createServer(gzip.gzip(), function(req, res) {
   } else {
     var cached = cache.get(apiUrl);
 
-    //if (cached && typeof cached === 'string' && cached.length > 0) {
-      //cache.put(apiUrl, cached, 120000);
-      //res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + cached + (apiType === 'json' ? '' : '"') + ');');
-      //res.end('cached');
-    //} else {
+    if (cached && typeof cached === 'string' && cached.length > 0) {
+      cache.put(apiUrl, cached, 120000);
+      res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + cached + (apiType === 'json' ? '' : '"') + ');');
+    } else {
       var externalReqHeaders = _.omit(req.headers, 'accept-encoding', 'connection', 'cookie', 'host', 'user-agent');
 
       request({
@@ -43,12 +42,8 @@ connect.createServer(gzip.gzip(), function(req, res) {
         uri: apiUrl
       }, function(error, response, body) {
         if (error) {
-          //res.end(apiCallback + '({"error":"Error!!!!!","success":false});');
-          res.end('error');
+          res.end(apiCallback + '({"error":"Error!!!!!","success":false});');
         } else {
-          res.end('new');
-
-          /*
           var text;
 
           switch (apiType) {
@@ -69,12 +64,10 @@ connect.createServer(gzip.gzip(), function(req, res) {
             break;
           }
 
-          //cache.put(apiUrl, text, 120000);
-          //res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + text + (apiType === 'json' ? '' : '"') + ');');
-          //res.end('new');
-          */
+          cache.put(apiUrl, text, 120000);
+          res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + text + (apiType === 'json' ? '' : '"') + ');');
         }
       });
-    //}
+    }
   }
 }).listen(process.env.PORT || 8000);
