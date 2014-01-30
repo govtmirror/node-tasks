@@ -31,7 +31,8 @@ connect.createServer(gzip.gzip(), function(req, res) {
 
     if (cached && typeof cached === 'string' && cached.length > 0) {
       cache.put(apiUrl, cached, 120000);
-      res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + cached + (apiType === 'json' ? '' : '"') + ');');
+      //res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + cached + (apiType === 'json' ? '' : '"') + ');');
+      res.end('cached');
     } else {
       var externalReqHeaders = _.omit(req.headers, 'accept-encoding', 'connection', 'cookie', 'host', 'user-agent');
 
@@ -42,7 +43,8 @@ connect.createServer(gzip.gzip(), function(req, res) {
         uri: apiUrl
       }, function(error, response, body) {
         if (error) {
-          res.end(apiCallback + '({"error":"Error!!!!!","success":false});');
+          //res.end(apiCallback + '({"error":"Error!!!!!","success":false});');
+          res.end('no good');
         } else {
           var text;
 
@@ -67,7 +69,8 @@ connect.createServer(gzip.gzip(), function(req, res) {
           }
 
           cache.put(apiUrl, text, 120000);
-          res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + text + (apiType === 'json' ? '' : '"') + ');');
+          //res.end(apiCallback + '(' + (apiType === 'json' ? '' : '"') + text + (apiType === 'json' ? '' : '"') + ');');
+          res.end('new');
         }
       });
     }
