@@ -1,0 +1,14 @@
+{
+  "name": "air-network-monitors-to-geojson",
+  "version": "0.0.0",
+  "description": "Creates a dataset of monitoring sites where air quality is measured.",
+  "main": "togeojson.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Katrina Engelsted",
+  "license": "Public Domain",
+  "dependencies": {
+    "request": "~2.31.0"
+  }
+}
