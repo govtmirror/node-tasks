@@ -2,11 +2,11 @@
  * This code is written against an ArcGIS Server 10.11 REST endpoint.
  */
 var _ = require('underscore')._,
-    endpoint = 'http://insidemapservices.nps.gov/arcgis/rest/services/Testing/WildlandFireFeature/FeatureServer/1',
+    endpoint = 'http://mobilegis.nps.gov/arcgis/rest/services/Fire/FireOccurrence/FeatureServer/0',
     entityName,
     fs = require('fs'),
     mkdirp = require('mkdirp'),
-    namespace = 'WildlandFire',
+    namespace = 'FireOccurrence',
     request = require('request');
 
 /**
