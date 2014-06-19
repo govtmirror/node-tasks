@@ -32,27 +32,26 @@ fs.readFile('data/network-monitors.json', function(error, data) {
     geometries.push({
       "geometry": {
         "coordinates": [
-          parseFloat(record.Lon),
-          parseFloat(record.Lat)
+          parseFloat(record.Longitude),
+          parseFloat(record.Latitude)
         ],
         "type": "Point"
       },
       "properties": {
-        "County FIPS": record.CountyFIPS,
-        "Country": record.Country,
+        "Site Name": record.SiteName,
+        "Parameter": record.Parameter,
         "Dataset Code": record.DatasetCode,
+        "ImNetworkID": record.ImNetworkID
         "Dataset ID": record.DatasetID,
-        "Dataset Name": record.DatasetName,
-        "Elevation": parseInt(record.Elev, 10),
-        "End Date": new Date(record.End),
+        "ElevationMSL": parseInt(record.Elev, 10),
+        "End Date": new Date(record.DataEndDate),
         "EPA Code": record.EPACode,
-        "Frequency": record.Freq,
         "Site Code": record.SiteCode,
         "Site ID": record.SiteID,
-        "Site Name": record.SiteName,
-        "Start Date": new Date(record.Start),
+        "Start Date": new Date(record.DataStartDate),
         "State": record.State,
-        "State FIPS": record.StateFIPS
+        "State FIPS": record.StateFIPSCode,
+        "Active": record.Active
       },
       "type": "Feature"
     });
