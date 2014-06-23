@@ -8,13 +8,13 @@ fs.readFile(filename, 'utf-8', function(err, data) {
   var info = [],
   records = JSON.parse(data);
 
-  var endDate = function(){
-    if (record.DataEndDate === '05/31/2013'){
-      return '';
-    } else {
-      return record.DataEndDate;
-    }
-  };
+  // var endDate = function(){
+  //   if (record.DataEndDate === '05/31/2013'){
+  //     return '';
+  //   } else {
+  //     return record.DataEndDate;
+  //   }
+  // };
 
   for (var i = 0; i < records.length; i++) {
     var record = records[i];
@@ -96,5 +96,5 @@ fs.readFile(filename, 'utf-8', function(err, data) {
     }
   }
 
-  fs.writeFile('./sites.geojson', '{"type":"FeatureCollection","features":' + JSON.stringify(info) + '}');
+  fs.writeFile('data/network-monitors.geojson', '{"type":"FeatureCollection","features":' + JSON.stringify(info) + '}');
 });
