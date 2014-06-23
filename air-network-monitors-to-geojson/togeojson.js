@@ -76,6 +76,7 @@ fs.readFile(filename, 'utf-8', function(err, data) {
           "type": "Point"
         },
         "properties": {
+          "Data Access": record.DataAccess,
           "ImNetworkID": nettyNetworkID[record.ImNetworkID],
           "Site ID": record.SiteID,
           "Site Code": record.SiteCode,
