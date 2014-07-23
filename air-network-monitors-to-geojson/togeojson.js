@@ -32,6 +32,14 @@ fs.readFile(filename, 'utf-8', function(err, data) {
       //   }
       // };
 
+      var order = {
+        'Gaseous Ammonia': 1,
+        'Wet Mercury Deposition': 2,
+        'Visibility': 3,
+        'Wet Sulfur and Nitrogen Deposition': 4,
+        'Ozone':5
+      }
+
       var nettyNetworkID = {
         1: 'nccn',
         2: 'ncbn',
@@ -88,9 +96,8 @@ fs.readFile(filename, 'utf-8', function(err, data) {
           "Elevation": parseInt(record.ElevationMSL, 10),
           "End Date": new Date(record.DataEndDate),
           "Start Date": new Date(record.DataStartDate),
-          "State": record.State,
-          "State FIPS": record.StateFIPSCode,
-          "Active": record.Active
+          "Active": record.Active,
+          "Order": order[record.Parameter]
         },
         "type": "Feature"
       });
