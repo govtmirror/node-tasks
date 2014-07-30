@@ -8,29 +8,18 @@ fs.readFile(filename, 'utf-8', function(err, data) {
   var info = [],
   records = JSON.parse(data);
 
-  // var endDate = function(){
-  //   if (record.DataEndDate === '05/31/2013'){
-  //     return '';
-  //   } else {
-  //     return record.DataEndDate;
-  //   }
-  // };
-
   for (var i = 0; i < records.length; i++) {
     var record = records[i];
 
     if (record.Latitude !== null && record.Latitude !== null) {
-      // var linkyLink = function(){
-      //   if (record.DataAccess === ''){
-      //     return '';
-      //   } else if (record.DataAccess === '') {
-      //     return '';
-      //   } else if (record.DataAccess === ''){
-
-      //   } else {
-      //     return '';
-      //   }
-      // };
+      var linkyLink = {
+        'AQS': 'http://www.nature.nps.gov/assets/intercept/?addr=http://www.epa.gov/airdata/',
+        'CASTNET':'http://www.nature.nps.gov/assets/intercept/?addr=http://epa.gov/castnet/javaweb/index.html',
+        'NADP/NTN':'http://www.nature.nps.gov/assets/intercept/?addr=http://epa.gov/castnet/javaweb/index.html',
+        'NADP/MDN':'http://www.nature.nps.gov/assets/intercept/?addr=http://nadp.sws.uiuc.edu/MDN/',
+        'NADP/AmoN':'http://www.nature.nps.gov/assets/intercept/?addr=http://nadp.sws.uiuc.edu/AMoN/',
+        'IMPROVE':'http://www.nature.nps.gov/assets/intercept/?addr=http://vista.cira.colostate.edu/improve/data/data.htm'
+      };
 
       var order = {
         'Gaseous Ammonia': 1,
@@ -84,18 +73,19 @@ fs.readFile(filename, 'utf-8', function(err, data) {
           "type": "Point"
         },
         "properties": {
-          "Data Access": record.DataAccess,
+          "DataAccess": record.DataAccess,
+          "Link": linkyLink[record.DataAccess],
           "ImNetworkID": nettyNetworkID[record.ImNetworkID],
-          "Site ID": record.SiteID,
-          "Site Code": record.SiteCode,
-          "EPA Code": record.EPACode,
-          "Site Name": record.SiteName,
+          "SiteID": record.SiteID,
+          "SiteCode": record.SiteCode,
+          "EPACode": record.EPACode,
+          "SiteName": record.SiteName,
           "Parameter": record.Parameter,
-          "Dataset Code": record.DatasetCode,
-          "Dataset ID": record.DatasetID,
+          "DatasetCode": record.DatasetCode,
+          "DatasetID": record.DatasetID,
           "Elevation": parseInt(record.ElevationMSL, 10),
-          "End Date": new Date(record.DataEndDate),
-          "Start Date": new Date(record.DataStartDate),
+          "EndDate": new Date(record.DataEndDate),
+          "StartDate": new Date(record.DataStartDate),
           "Active": record.Active,
           "Order": order[record.Parameter]
         },
