@@ -1,20 +1,25 @@
 
 var fs = require('fs'),
-parse = require('csv-parse'),
 jf = require('jsonfile'),
-util = require('util'),
-input = './networks.csv';
+util = require('util');
 
-fs.readFile(input, 'utf-8', function(err, data) {
-  if (err) throw err;
+fs.readFile('./im_networks_buffer.geojson', 'utf-8', function(err, data) {
 
-    jf.readFile('./im_networks_buffer.geojson', function(err, geoJson) {
-      for (var i = 0; i < geoJson.features.length; i++) {
-        var feature = geoJson.features[i],
-        record = feature.properties.network_co,
-        coordinates = feature.geometry.coordinates;
+  var info = [], network,
+  records = JSON.parse(data);
 
-    var file = fs.writeFile('/Users/NPSKatrina/NPMap/data/base_data/boundaries/im_networks/' + record + '.geojson','{"type":"Feature","properties":{"network_co":"'+ record + '"},"geometry":{"type":"Polygon","coordinates":' + coordinates + '}');
-        }
-    });
-  });
+    for (var i = 0; i < records.features.length; i++) {
+      var feature = records.features[i];
+      network = feature.properties.network_co;
+      coordinates = feature.geometry;
+
+      info.push({
+        "type":"Feature",
+        "geometry": coordinates,
+        "properties": {
+          "network_co": network }
+      });
+
+  fs.writeFile('/Users/NPSKatrina/NPMap/data/base_data/boundaries/im_networks/' + network + '.geojson', 'c{"type":"FeatureCollection","features":' + JSON.stringify(info[i]) + '}');
+  }
+});
