@@ -13,12 +13,12 @@ fs.readFile(filename, 'utf-8', function(err, data) {
 
     if (record.Latitude !== null && record.Latitude !== null) {
       var linkyLink = {
-        'AQS': 'http://www.nature.nps.gov/assets/intercept/?addr=http://www.epa.gov/airdata/',
-        'CASTNET':'http://www.nature.nps.gov/assets/intercept/?addr=http://epa.gov/castnet/javaweb/index.html',
-        'NADP/NTN':'http://www.nature.nps.gov/assets/intercept/?addr=http://epa.gov/castnet/javaweb/index.html',
-        'NADP/MDN':'http://www.nature.nps.gov/assets/intercept/?addr=http://nadp.sws.uiuc.edu/MDN/',
-        'NADP/AmoN':'http://www.nature.nps.gov/assets/intercept/?addr=http://nadp.sws.uiuc.edu/AMoN/',
-        'IMPROVE':'http://www.nature.nps.gov/assets/intercept/?addr=http://vista.cira.colostate.edu/improve/data/data.htm'
+        'AQS': 'http://www.epa.gov/airdata/',
+        'CASTNET':'http://epa.gov/castnet/javaweb/index.html',
+        'NADP/NTN':'http://epa.gov/castnet/javaweb/index.html',
+        'NADP/MDN':'http://nadp.sws.uiuc.edu/MDN/',
+        'NADP/AmoN':'http://nadp.sws.uiuc.edu/AMoN/',
+        'IMPROVE':'http://vista.cira.colostate.edu/improve/data/data.htm'
       };
 
       var order = {
@@ -94,5 +94,5 @@ fs.readFile(filename, 'utf-8', function(err, data) {
     }
   }
 
-  fs.writeFile('data/network-monitors.geojson', '{"type":"FeatureCollection","features":' + JSON.stringify(info) + '}');
+  fs.writeFile('data/air-monitors.geojson', '{"type":"FeatureCollection","features":' + JSON.stringify(info) + '}');
 });

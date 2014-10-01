@@ -4,7 +4,7 @@ class GistCleaner
   include HTTParty
 
   @username = 'MappingKat'
-  @password = 'taktak22'
+  @password = ''
 
   base_uri 'https://api.github.com'
   basic_auth @username, @password
