@@ -1,101 +1,66 @@
 // TODO: Extend this to include park attributes pulled in from CartoDB.
 
 var bounds = {
-    features: [],
-    type: 'FeatureCollection'
-  },
-  centroids = {
-    features: [],
-    type: 'FeatureCollection'
-  },
-  fs = require('fs'),
-  geoJson,
-  needToProcess = [],
-  parks = {},
-  shp = require('shp'),
-  Terraformer = require('terraformer'),
-  topojson = require('topojson');
+  features: [],
+  type: 'FeatureCollection'
+};
+var centroids = {
+  features: [],
+  type: 'FeatureCollection'
+};
+var fs = require('fs');
+var needToProcess = [];
+var parks = {};
+var shp = require('shpjs');
+var Terraformer = require('terraformer');
+var topojson = require('topojson');
+var geoJson;
+var interval;
+var shpx = require('shp2jsonx');
 
-geoJson = shp.readFileSync('data/nps_boundary');
-
-for (var i = 0; i < geoJson.features.length; i++) {
-  var feature = geoJson.features[i],
-      code = feature.properties.UNIT_CODE.trim(),
-      existing = parks[code],
-      properties = feature.properties;
-
-  for (var prop in properties) {
-    properties[prop] = properties[prop].trim();
-  }
-
-  if (existing) {
-    if (existing.type === 'FeatureCollection') {
-      existing.features.push(feature);
-    } else if (existing.type === 'Feature') {
-      existing = {
-        features: [
-          existing,
-          feature
-        ],
-        type: 'FeatureCollection'
-      };
-    } else {
-      console.log(existing);
-    }
-
-    parks[code] = existing;
-  } else {
-    parks[code] = feature;
-  }
-}
-
-for (var park in parks) {
-  needToProcess.push(parks[park]);
-}
-
-function callback() {
+function callback () {
   if (needToProcess.length) {
     processParks(needToProcess);
   } else {
     var path = 'data/parks';
 
-    fs.writeFile(path + '.geojson', JSON.stringify(geoJson), function() {
+    fs.writeFile(path + '.geojson', JSON.stringify(geoJson), function () {
       fs.writeFile(path + '.topojson', JSON.stringify(topojson.topology({
         collection: geoJson
       }, {
         quantization: 1000000
-      })), function() {
+      })), function () {
         fs.writeFile(path + '-bounds.geojson', JSON.stringify(bounds));
         fs.writeFile(path + '-centroids.geojson', JSON.stringify(centroids));
       });
     });
   }
 }
-function processParks(park) {
-  var bbox,
-    feature = JSON.parse(JSON.stringify(needToProcess.shift())),
-    featureBounds = {
-      geometry: {
-        coordinates: [[]],
-        type: 'Polygon'
-      },
-      type: 'Feature'
+function processParks (park) {
+  var bbox;
+  var feature = JSON.parse(JSON.stringify(needToProcess.shift()));
+  var featureBounds = {
+    geometry: {
+      coordinates: [[]],
+      type: 'Polygon'
     },
-    featureCentroid = {
-      geometry: {
-        coordinates: [],
-        type: 'Point'
-      },
-      type: 'Feature'
+    type: 'Feature'
+  };
+  var featureCentroid = {
+    geometry: {
+      coordinates: [],
+      type: 'Point'
     },
-    code = (function() {
-      if (feature.properties && feature.properties.UNIT_CODE) {
-        return feature.properties.UNIT_CODE.trim().toLowerCase();
-      } else {
-        return feature.features[0].properties.UNIT_CODE.trim().toLowerCase();
-      }
-    })(),
-    path = 'data/parks/' + code + '.';
+    type: 'Feature'
+  };
+  var code = (function () {
+    if (feature.properties && feature.properties.UNIT_CODE) {
+      return feature.properties.UNIT_CODE.trim().toLowerCase();
+    } else {
+      return feature.features[0].properties.UNIT_CODE.trim().toLowerCase();
+    }
+  })();
+  var path = 'data/parks/' + code + '.';
 
   if (feature.type === 'Feature') {
     bbox = new Terraformer.Feature(feature).bbox();
@@ -113,7 +78,7 @@ function processParks(park) {
   featureBounds.geometry.coordinates[0].push([bbox[2], bbox[1]]);
   bounds.features.push(featureBounds);
 
-  fs.writeFile(path + 'geojson', JSON.stringify(feature), 'utf8', function() {
+  fs.writeFile(path + 'geojson', JSON.stringify(feature), 'utf8', function () {
     var feature2 = JSON.parse(JSON.stringify(feature));
 
     fs.writeFile(path + 'topojson', JSON.stringify(topojson.topology({
@@ -124,4 +89,56 @@ function processParks(park) {
   });
 }
 
-processParks(needToProcess);
+// geoJson = shp.readFileSync('data/nps_boundary');
+
+
+shp('data/nps_boundary/nps_boundary').then(function (geojson) {
+  console.log(geojson);
+
+  geoJson = geojson;
+
+  /*
+  for (var i = 0; i < geoJson.features.length; i++) {
+    var feature = geoJson.features[i];
+    var code = feature.properties.UNIT_CODE.trim();
+    var existing = parks[code];
+    var properties = feature.properties;
+
+    for (var prop in properties) {
+      properties[prop] = properties[prop].trim();
+    }
+
+    if (existing) {
+      if (existing.type === 'FeatureCollection') {
+        existing.features.push(feature);
+      } else if (existing.type === 'Feature') {
+        existing = {
+          features: [
+            existing,
+            feature
+          ],
+          type: 'FeatureCollection'
+        };
+      } else {
+        console.log(existing);
+      }
+
+      parks[code] = existing;
+    } else {
+      parks[code] = feature;
+    }
+  }
+
+  for (var park in parks) {
+    needToProcess.push(parks[park]);
+  }
+
+  processParks(needToProcess);
+  */
+});
+interval = setInterval(function () {
+  if (geoJson) {
+    clearInterval(interval);
+    console.log(geoJson);
+  }
+}, 100);

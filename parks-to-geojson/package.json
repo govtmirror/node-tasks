@@ -9,9 +9,11 @@
   "author": "Nate Irwin",
   "license": "Public Domain",
   "dependencies": {
+    "geojson-utils": "^1.0.2",
     "shp": "0.0.1",
-    "topojson": "~1.4.5",
-    "geojson-utils": "~1.0.2",
-    "terraformer": "~1.0.1"
+    "shp2jsonx": "^1.0.1",
+    "shpjs": "^3.2.0",
+    "terraformer": "^1.0.5",
+    "topojson": "^1.4.9"
   }
 }
