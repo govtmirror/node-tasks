@@ -1,0 +1,17 @@
+{
+  "name": "hfc-park-map-cleanup",
+  "version": "0.0.0",
+  "description": "A simple script to help proofcheck and cleanup the HFC park maps.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nate Irwin",
+  "license": "Public Domain",
+  "dependencies": {
+    "archiver": "^0.20.0",
+    "request": "^2.61.0",
+    "wrench": "^1.5.8",
+    "zip-paths": "^0.3.1"
+  }
+}
