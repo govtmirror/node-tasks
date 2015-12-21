@@ -1,106 +1,113 @@
 var archiver = require('archiver');
+var dev = false;
 var fs = require('fs');
 var request = require('request');
-var wrench = require('wrench');
+var secrets = require('./secrets.json');
+var i;
 
-request('https://nps.cartodb.com/api/v2/sql?q=SELECT unit_code FROM parks ORDER BY unit_code', function (error, response) {
-  if (error) {
-    return;
+// TODO: Write script that iterates through all parks that have a geometry in nps.parks, checks for the presence of a Park Tiles map in nps-hfc.maps, and inserts it if it doesn't exist.
+
+
+
+
+
+
+function archiveFinished (directories) {
+  for (var i = 0; i < directories.length; i++) {
+    updateCartodb(directories[i]);
   }
+}
+function updateCartodb (alpha) {
+  var path = 'maps/' + alpha + '/brochure-map/archive.zip';
 
-  var cartodbUnitCodes = [];
-  var cartodbUnitCodesMissing = [];
-  var mapUnitCodes = [];
-  var mapUnitCodesMissing = [];
-  var rows = JSON.parse(response.body).rows;
-  var i;
-  var unitCode;
-
-  function copy (srcFile, destFile) {
-    console.log(srcFile);
-    console.log(destFile);
-    fs.writeFileSync(destFile, fs.readFileSync(srcFile, 'utf8'), 'utf8');
-  }
-
-  for (i = 0; i < rows.length; i++) {
-    cartodbUnitCodes.push(rows[i].unit_code.toLowerCase());
-  }
-
-  fs.readdir('test', function (err, directories) {
+  fs.stat('maps/' + alpha + '/brochure-map/archive.zip', function (err, stats) {
     if (err) {
       return;
     }
 
-    for (i = 0; i < directories.length; i++) {
-      var directory = directories[i];
+    var bytes = stats.size;
 
-      if (directory !== '.DS_Store') {
-        var archive = archiver('zip');
-        var output = fs.createWriteStream('test/' + directory + '/brochure-map/archive.zip');
+    fs.unlink(path, function () {
+      request('https://nps-hfc.cartodb.com/api/v2/sql?api_key=' + secrets.api_key + '&q=SELECT unit_code FROM parks' + (dev ? '_dev' : '') + ' WHERE unit_code=\'' + alpha + '\'', function (err, response, body) {
+        if (err) {
+          return;
+        }
 
-        mapUnitCodes.push(directory.toLowerCase());
-        output.on('close', function () {
-          var path = 'test/' + directory + '/brochure-map/archive.zip';
+        if (response) {
+          response = JSON.parse(body);
 
-          fs.stat('test/' + directory + '/brochure-map/archive.zip', function (err, stats) {
-            if (err) {
-              return;
-            }
+          function done () {
+            request('https://nps-hfc.cartodb.com/api/v2/sql?api_key=' + secrets.api_key + '&q=INSERT INTO maps' + (dev ? '_dev' : '') + ' (created_by,file_size,is_default,map_code,name,type,unit_code,updated_by,zoomify_path) VALUES (\'Nathaniel Irwin\',' + bytes + ',true,\'brochure-map\',\'Brochure Map\',\'Zoomify\',\'' + alpha + '\',\'Nathaniel Irwin\',\'http://www.nps.gov/maps/hfc/park-maps/' + alpha + '/brochure-map/\')', function (err, response, body) {
+              if (err) {
+                return;
+              }
 
-            var bytes = stats.size;
-
-            fs.unlink(path, function () {
-              fs.readdir('test/' + directory + '/brochure-map', function (err, files) {
+              console.log('Inserted Zoomify map for: ' + alpha);
+              request('https://nps.cartodb.com/api/v2/sql?api_key=' + secrets.api_key + '&q=SELECT case WHEN the_geom IS NULL then true else false end as the_geom_is_null FROM parks WHERE unit_code=\'' + alpha + '\'', function (err, response, body) {
                 if (err) {
                   return;
                 }
 
-                console.log(bytes);
+                response = JSON.parse(body);
 
-                wrench.copyDirSyncRecursive('test/' + directory + '/brochure-map', 'copy/' + directory + '/brochure-map', {
-                  excludeHiddenUnix: true,
-                  forceDelete: true,
-                  preserveFiles: false
-                });
-                // TODO: Need to make sure park is in parks table.
-                // INSERT INTO test_table (column_name, column_name_2, the_geom) VALUES ('this is a string', 11, ST_SetSRID(ST_Point(-110, 43),4326))&api_key={Your API key}
-                request('https://nps-hfc.cartodb.com/api/v2/sql?ap_key=' + secrets.api_key + '&q=INSERT INTO maps () VALUES ()', function (error, response, body) {
-                  console.log(body);
-                });
+                if (response.rows[0].the_geom_is_null === false) {
+                  request('https://nps-hfc.cartodb.com/api/v2/sql?api_key=' + secrets.api_key + '&q=INSERT INTO maps' + (dev ? '_dev' : '') + ' (created_by,is_default,name,type,unit_code,updated_by) VALUES (\'Nathaniel Irwin\',false,\'Park Tiles\',\'Interactive\',\'' + alpha + '\',\'Nathaniel Irwin\')', function (err, response, body) {
+                    if (err) {
+                      return;
+                    }
+
+                    console.log('Inserted Park Tiles map for: ' + alpha);
+                  });
+                } else {
+                  console.log('No bounding box for: ' + alpha);
+                }
               });
             });
-          });
-        });
-        archive.pipe(output);
-        archive.bulk([{
-          cwd: 'test/' + directory + '/brochure-map',
-          dot: true,
-          expand: true,
-          src: [
-            '**/*'
-          ]
-        }]);
-        archive.finalize();
-      }
-    }
+          }
 
-    for (i = 0; i < cartodbUnitCodes.length; i++) {
-      unitCode = cartodbUnitCodes[i];
+          if (response.total_rows) {
+            done();
+          } else {
+            request('https://nps-hfc.cartodb.com/api/v2/sql?api_key=' + secrets.api_key + '&q=INSERT INTO parks' + (dev ? '_dev' : '') + ' (created_by,unit_code,updated_by) VALUES (\'Nathaniel Irwin\',\'' + alpha + '\',\'Nathaniel Irwin\')', function (err, response, body) {
+              if (err) {
+                return;
+              }
 
-      if (mapUnitCodes.indexOf(unitCode) === -1) {
-        mapUnitCodesMissing.push(unitCode);
-      }
-    }
-
-    for (i = 0; i < mapUnitCodes.length; i++) {
-      unitCode = mapUnitCodes[i];
-
-      if (cartodbUnitCodes.indexOf(unitCode) === -1) {
-        cartodbUnitCodesMissing.push(unitCode);
-      }
-    }
-
-    // console.log(cartodbUnitCodesMissing);
-    // console.log(mapUnitCodesMissing);
+              console.log('Inserted park: ' + alpha);
+              done();
+            });
+          }
+        }
+      });
+    });
   });
+}
+
+fs.readdir('maps', function (err, directories) {
+  if (err) {
+    return;
+  }
+
+  for (i = 0; i < directories.length; i++) {
+    var directory = directories[i];
+
+    if (directory !== '.DS_Store') {
+      var archive = archiver('zip');
+      var output = fs.createWriteStream('maps/' + directory + '/brochure-map/archive.zip');
+
+      output.on('close', function () {
+        archiveFinished(directories);
+      });
+      archive.pipe(output);
+      archive.bulk([{
+        cwd: 'maps/' + directory + '/brochure-map',
+        dot: true,
+        expand: true,
+        src: [
+          '**/*'
+        ]
+      }]);
+      archive.finalize();
+    }
+  }
 });
