@@ -5,13 +5,6 @@ var request = require('request');
 var secrets = require('./secrets.json');
 var i;
 
-// TODO: Write script that iterates through all parks that have a geometry in nps.parks, checks for the presence of a Park Tiles map in nps-hfc.maps, and inserts it if it doesn't exist.
-
-
-
-
-
-
 function archiveFinished (directories) {
   for (var i = 0; i < directories.length; i++) {
     updateCartodb(directories[i]);
