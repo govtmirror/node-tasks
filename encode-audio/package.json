@@ -1,0 +1,14 @@
+{
+  "name": "encode-audio",
+  "version": "0.0.0",
+  "description": "Encodes audio files for Places Mobile tours.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nate Irwin",
+  "license": "Public Domain",
+  "dependencies": {
+    "request": "^2.61.0"
+  }
+}
