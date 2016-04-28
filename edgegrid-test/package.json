@@ -1,0 +1,14 @@
+{
+  "name": "edgegrid-test",
+  "version": "0.0.0",
+  "description": "Testing Akamai's edgegrid authentication.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nate Irwin",
+  "license": "Public Domain",
+  "dependencies": {
+    "edgegrid": "^2.0.7"
+  }
+}
