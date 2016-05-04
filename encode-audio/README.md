@@ -1,6 +1,6 @@
 # encode-audio
 
-1. Upload the origin .wav files to the NPMap website (`/npmap/projects/encode-audio/`)
+1. Upload the origin .m4a or .wav files to the NPMap website (`/npmap/projects/encode-audio/`)
 2. `npm install`
 3. `node app.js`
 
