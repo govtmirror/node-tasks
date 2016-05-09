@@ -46,7 +46,7 @@ fs.readdir('./input', function (error, files) {
           return;
         }
 
-        path = './output/' + file.replace(/ /g, '_').replace('.wav', '.m4a');
+        path = './output/' + file.replace(/ /g, '_').replace('.mp3', '.m4a').replace('.wav', '.m4a');
         url = data.outputs[0].url;
 
         poll(data.id, function (success, error) {
