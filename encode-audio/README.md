@@ -4,7 +4,7 @@
 2. `npm install`
 3. `node app.js`
 
-The encoded files will be placed in the `./input` directory
+The encoded files will be placed in the `./output` directory
 
 ## TODO
 
